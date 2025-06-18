@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: playlist-copycat
+    env: python
+    buildCommand: ""
+    startCommand: gunicorn app:app
+    envVars:
+      - key: SPOTIPY_CLIENT_ID
+        value: your_client_id_here
+      - key: SPOTIPY_CLIENT_SECRET
+        value: your_client_secret_here
+      - key: SPOTIPY_REDIRECT_URI
+        value: https://playlist-copycat.onrender.com/callback

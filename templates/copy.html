@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Copy Playlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Paste a Playlist URL</h1>
+        <form method="POST">
+            <input type="text" name="playlist_url" placeholder="https://open.spotify.com/playlist/..." required>
+            <br>
+            <button type="submit">Copy Playlist</button>
+        </form>
+
+        {% if name %}
+            <p>✅ Playlist <strong>{{ name }}</strong> copied successfully!</p>
+
+            {% if cover_url %}
+                <img src="{{ cover_url }}" width="200" style="border-radius: 10px; margin-top: 20px;">
+            {% endif %}
+
+            <br><br>
+            <a href="/logout" class="button">Log Out</a>
+        {% endif %}
+    </div>
+</body>
+</html>
