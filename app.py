@@ -72,9 +72,25 @@ def copy():
         user_id = sp.current_user()['id']
         new_playlist = sp.user_playlist_create(user=user_id, name=name, public=public, description=description)
 
-        # Copy tracks
-        track_uris = [item["track"]["uri"] for item in original["tracks"]["items"] if item["track"]]
-        sp.playlist_add_items(new_playlist["id"], track_uris)
+        # Fetch ALL tracks using pagination
+        def get_all_tracks(sp, playlist_id):
+            tracks = []
+            offset = 0
+            while True:
+                response = sp.playlist_items(playlist_id, offset=offset, limit=100)
+                items = response['items']
+                if not items:
+                    break
+                tracks.extend(items)
+                offset += 100
+            return tracks
+
+        all_tracks = get_all_tracks(sp, playlist_id)
+        track_uris = [item["track"]["uri"] for item in all_tracks if item["track"]]
+
+        # Add tracks in chunks of 100
+        for i in range(0, len(track_uris), 100):
+            sp.playlist_add_items(new_playlist["id"], track_uris[i:i+100])
 
         # Copy cover image
         images = original.get('images', [])
@@ -84,8 +100,6 @@ def copy():
             img_data = requests.get(img_url).content
             encoded_img = base64.b64encode(img_data).decode('utf-8')
             sp.playlist_upload_cover_image(new_playlist['id'], encoded_img)
-
-            # Wait briefly before trying to fetch the cover
             time.sleep(2)
 
         # Fetch the new playlist again to get cover image URL
@@ -95,6 +109,7 @@ def copy():
         return render_template('copy.html', name=new_playlist['name'], cover_url=new_cover_url)
 
     return render_template('copy.html', name=None)
+
 
 
 @app.route('/logout')
