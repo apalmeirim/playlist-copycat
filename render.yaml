@@ -6,8 +6,8 @@ services:
     startCommand: gunicorn app:app
     envVars:
       - key: SPOTIPY_CLIENT_ID
-        value: your_client_id_here
+        value: 34d93772ca6b46228d0888078655c322
       - key: SPOTIPY_CLIENT_SECRET
-        value: your_client_secret_here
+        value: 92683941517c4daba71fbaecccc3e684
       - key: SPOTIPY_REDIRECT_URI
         value: https://playlist-copycat.onrender.com/callback
