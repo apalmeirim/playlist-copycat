@@ -2,72 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Playlist Copycat</title>
-    <style>
-        body {
-            background-color: #121212;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding-top: 50px;
-        }
-
-        .spinner {
-            display: none;
-            margin: 20px auto;
-            border: 6px solid #f3f3f3;
-            border-top: 6px solid #1db954;
-            border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-        }
-
-        .cover {
-            margin-top: 30px;
-        }
-
-        .cover img {
-            width: 300px;
-            border-radius: 10px;
-        }
-
-    </style>
+    <title>Copy Playlist</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Copy a Spotify Playlist</h1>
-
-    {% if name %}
-        <h2>{{ name }}</h2>
-        {% if cover_url %}
-            <div class="cover">
-                <img src="{{ cover_url }}" alt="Playlist cover">
-            </div>
-        {% endif %}
-        <p><a href="/logout"><button>Logout</button></a></p>
-    {% else %}
-        <form method="POST" onsubmit="showSpinner()">
-            <input type="text" name="playlist_url" placeholder="Enter Spotify Playlist URL" required>
+    <div class="container">
+        <h1>Paste a Playlist URL</h1>
+        <form method="POST">
+            <input type="text" name="playlist_url" placeholder="https://open.spotify.com/playlist/..." required>
+            <br>
             <button type="submit">Copy Playlist</button>
         </form>
 
-        <div class="spinner" id="spinner"></div>
-    {% endif %}
+        {% if name %}
+            <p>✅ Playlist <strong>{{ name }}</strong> copied successfully!</p>
 
-    <script>
-        function showSpinner() {
-            document.getElementById('spinner').style.display = 'block';
-        }
-    </script>
+            {% if cover_url %}
+                <img src="{{ cover_url }}" width="200" style="border-radius: 10px; margin-top: 20px;">
+            {% endif %}
+
+            <br><br>
+            <a href="/logout" class="button">Log Out</a>
+        {% endif %}
+    </div>
 </body>
 </html>
